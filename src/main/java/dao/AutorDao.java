@@ -46,4 +46,9 @@ public class AutorDao extends AbstractDao<Autor> {
             throw new RuntimeException("Error al agregar libro al autor", e);
         }
     }
+    public List<Autor> findAutoresConMasDeUnLibro() {
+        String jpql = "SELECT a FROM Autor a WHERE SIZE(a.libros) > 1";
+        TypedQuery<Autor> query = getEntityManager().createQuery(jpql, Autor.class);
+        return query.getResultList();
+    }
 }
