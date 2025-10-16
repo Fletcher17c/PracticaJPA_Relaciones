@@ -1,0 +1,34 @@
+# Eclipse / JDT LS
+.project
+.classpath
+.factorypath
+.settings/
+
+# Ignore in subfolders too
+**/.project
+**/.classpath
+**/.factorypath
+**/.settings/
+
+# IntelliJ IDEA
+.idea/
+*.iml
+out/
+.mvn/
+
+# Compiled files
+*.class
+
+# Maven build output
+target/
+
+
+# Logs
+*.log
+*.tmp
+*.swp
+
+# OS
+.DS_Store
+Thumbs.db
+
