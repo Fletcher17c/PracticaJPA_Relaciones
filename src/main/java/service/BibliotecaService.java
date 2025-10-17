@@ -228,6 +228,25 @@ public class BibliotecaService {
         JPAUtil.close();
     }
 
+    public void debugEntityManager() {
+        System.out.println("=== DEBUG ENTITY MANAGER ===");
+        System.out.println("EntityManager is open: " + entityManager.isOpen());
+        System.out.println("EntityManager transaction is active: " + entityManager.getTransaction().isActive());
+
+        // Test if DAOs have EntityManager
+        System.out.println("AutorDao EntityManager: " + (autorDao != null ? "Set" : "NULL"));
+        System.out.println("LibroDao EntityManager: " + (libroDao != null ? "Set" : "NULL"));
+        System.out.println("CategoriaDao EntityManager: " + (categoriaDao != null ? "Set" : "NULL"));
+
+        // Test simple query
+        try {
+            Long count = entityManager.createQuery("SELECT COUNT(a) FROM Autor a", Long.class).getSingleResult();
+            System.out.println("Autores en base de datos: " + count);
+        } catch (Exception e) {
+            System.err.println("Error en consulta de prueba: " + e.getMessage());
+        }
+    }
+
     public static void main(String[] args) {
         BibliotecaService service = new BibliotecaService();
 

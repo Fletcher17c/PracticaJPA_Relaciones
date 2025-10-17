@@ -3,25 +3,27 @@ package run;
 import service.BibliotecaService;
 
 public class Main {
-
     public static void main(String[] args) {
         BibliotecaService service = new BibliotecaService();
 
         try {
-            // Inicializar datos de ejemplo (inserta autores, libros y categorías)
+            // 0. Debug
+            service.debugEntityManager();
+
+            // 1. Inicializar datos
             service.inicializarDatos();
 
-            // Mostrar un resumen de los datos insertados
+            // 2. Mostrar resumen
             service.mostrarResumenDatos();
 
-            // Listar todos los libros con su autor y categorías
+            // 3. Listar libros completos
             service.listarLibrosCompleto();
 
-            // Demostraciones adicionales sobre relaciones
+            // 4. Demostrar relaciones
             service.demostrarRelaciones();
 
         } catch (Exception e) {
-            System.err.println("Error ejecutando la aplicación: " + e.getMessage());
+            System.err.println("Error: " + e.getMessage());
             e.printStackTrace();
         } finally {
             service.close();

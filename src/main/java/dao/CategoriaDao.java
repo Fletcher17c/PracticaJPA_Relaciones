@@ -9,8 +9,9 @@ import java.util.Optional;
 
 public class CategoriaDao extends AbstractDao<Categoria> {
 
+    // Fix the constructor
     public CategoriaDao(EntityManager entityManager) {
-        setEntityManager(entityManager);
+        super(entityManager); // Call super constructor
     }
 
     public Optional<Categoria> findByIdWithLibros(Long id) {
@@ -20,6 +21,7 @@ public class CategoriaDao extends AbstractDao<Categoria> {
             query.setParameter("id", id);
             return Optional.ofNullable(query.getSingleResult());
         } catch (Exception e) {
+            System.err.println("Error en findByIdWithLibros: " + e.getMessage());
             return Optional.empty();
         }
     }
@@ -31,6 +33,7 @@ public class CategoriaDao extends AbstractDao<Categoria> {
             query.setParameter("nombre", nombre);
             return Optional.ofNullable(query.getSingleResult());
         } catch (Exception e) {
+            System.err.println("Error en findByNombre: " + e.getMessage());
             return Optional.empty();
         }
     }

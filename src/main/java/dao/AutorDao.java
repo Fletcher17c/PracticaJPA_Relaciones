@@ -1,5 +1,6 @@
 package dao;
 
+import jakarta.persistence.EntityTransaction;
 import models.Autor;
 import models.Libro;
 import jakarta.persistence.EntityManager;
@@ -9,8 +10,9 @@ import java.util.Optional;
 
 public class AutorDao extends AbstractDao<Autor> {
 
+    // Fix the constructor to call super
     public AutorDao(EntityManager entityManager) {
-        setEntityManager(entityManager);
+        super(entityManager);
     }
 
     public Optional<Autor> findByIdWithLibros(Long id) {
@@ -20,6 +22,7 @@ public class AutorDao extends AbstractDao<Autor> {
             query.setParameter("id", id);
             return Optional.ofNullable(query.getSingleResult());
         } catch (Exception e) {
+            System.err.println("Error en findByIdWithLibros: " + e.getMessage());
             return Optional.empty();
         }
     }
@@ -33,19 +36,23 @@ public class AutorDao extends AbstractDao<Autor> {
 
     public void agregarLibroAlAutor(Long autorId, Libro libro) {
         EntityManager em = getEntityManager();
-        em.getTransaction().begin();
+        EntityTransaction tx = em.getTransaction();
         try {
+            tx.begin();
             Autor autor = em.find(Autor.class, autorId);
             if (autor != null) {
                 autor.agregarLibro(libro);
                 em.merge(autor);
             }
-            em.getTransaction().commit();
+            tx.commit();
         } catch (Exception e) {
-            em.getTransaction().rollback();
-            throw new RuntimeException("Error al agregar libro al autor", e);
+            if (tx != null && tx.isActive()) {
+                tx.rollback();
+            }
+            throw new RuntimeException("Error al agregar libro al autor: " + e.getMessage(), e);
         }
     }
+
     public List<Autor> findAutoresConMasDeUnLibro() {
         String jpql = "SELECT a FROM Autor a WHERE SIZE(a.libros) > 1";
         TypedQuery<Autor> query = getEntityManager().createQuery(jpql, Autor.class);

@@ -1,5 +1,6 @@
 package dao;
 
+import jakarta.persistence.EntityTransaction;
 import models.Libro;
 import models.Autor;
 import models.Categoria;
@@ -10,8 +11,9 @@ import java.util.Optional;
 
 public class LibroDao extends AbstractDao<Libro> {
 
+    // Fix the constructor
     public LibroDao(EntityManager entityManager) {
-        setEntityManager(entityManager);
+        super(entityManager); // Call super constructor
     }
 
     public Optional<Libro> findByIdWithAutorAndCategorias(Long id) {
@@ -24,6 +26,7 @@ public class LibroDao extends AbstractDao<Libro> {
             query.setParameter("id", id);
             return Optional.ofNullable(query.getSingleResult());
         } catch (Exception e) {
+            System.err.println("Error en findByIdWithAutorAndCategorias: " + e.getMessage());
             return Optional.empty();
         }
     }
@@ -59,31 +62,20 @@ public class LibroDao extends AbstractDao<Libro> {
 
     public void agregarCategoriaALibro(Long libroId, Categoria categoria) {
         EntityManager em = getEntityManager();
-        em.getTransaction().begin();
+        EntityTransaction tx = em.getTransaction();
         try {
+            tx.begin();
             Libro libro = em.find(Libro.class, libroId);
             if (libro != null) {
                 libro.agregarCategoria(categoria);
                 em.merge(libro);
             }
-            em.getTransaction().commit();
+            tx.commit();
         } catch (Exception e) {
-            em.getTransaction().rollback();
-            throw new RuntimeException("Error al agregar categoría al libro", e);
+            if (tx != null && tx.isActive()) {
+                tx.rollback();
+            }
+            throw new RuntimeException("Error al agregar categoría al libro: " + e.getMessage(), e);
         }
-    }
-
-    public List<Libro> findByCategoria(Long categoriaId) {
-        String jpql = "SELECT l FROM Libro l JOIN l.categorias c WHERE c.id = :categoriaId";
-        TypedQuery<Libro> query = getEntityManager().createQuery(jpql, Libro.class);
-        query.setParameter("categoriaId", categoriaId);
-        return query.getResultList();
-    }
-
-    public long countLibrosPorAutor(Long autorId) {
-        String jpql = "SELECT COUNT(l) FROM Libro l WHERE l.autor.id = :autorId";
-        TypedQuery<Long> query = getEntityManager().createQuery(jpql, Long.class);
-        query.setParameter("autorId", autorId);
-        return query.getSingleResult();
     }
 }
