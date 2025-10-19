@@ -8,6 +8,9 @@ Sistema de gestión bibliográfica que modela las relaciones entre autores, libr
 - **Libro**: id, título, año de publicación, autor
 - **Categoria**: id, nombre
 
+## Relaciones entre las entidades
+![Diagrama de entidades y sus relaciones](/assets/DiagramaDeClases.png)
+
 ## Relaciones
 
 - **Autor-Libro**: OneToMany/ManyToOne (un autor, muchos libros)
@@ -30,7 +33,7 @@ Sistema de gestión bibliográfica que modela las relaciones entre autores, libr
 
 ## Tests unitarios
 Utilizamos JUnit-API Jupiter, JUnit-Engine Jupiter y Mockito para hacer pruebas unitarias que aseguren que el programa funcione de manera correcta
-- ```JUnit Jupiter```, permite escribir y ejecutar pruebas con anotaciones como @Test, @BeforeEach y AfterEach, mejorando la calidad del codigo e identificando fallas.
+- ```JUnit```, ```Jupiter```, permite escribir y ejecutar pruebas con anotaciones como @Test, @BeforeEach y AfterEach, mejorando la calidad del codigo e identificando fallas.
 - ```Mockito``` Permite crear objetos simulados (Mocks) que imitan el comportamiento de clases reales permitiendo aislar las pruebas y verificar las interacciones entre objetos y metodos.
 
 ![imagen de los tests completados sin errores](/assets/Tests.png)
