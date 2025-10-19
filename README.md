@@ -9,7 +9,10 @@ Sistema de gestión bibliográfica que modela las relaciones entre autores, libr
 - **Categoria**: id, nombre
 
 ## Relaciones entre las entidades
-![Diagrama de entidades y sus relaciones](/assets/DiagramaDeClases.png)
+<p align="center">
+  <img src="/assets/DiagramaDeClases.png" alt="Diagrama de entidades y sus relaciones" width="400" style="display: block; margin: 0 auto;">
+</p>
+
 
 ## Relaciones
 
